@@ -39,14 +39,18 @@ let Controller = class Controller {
             if ($(`#${id}`).val().trim() == "") {
               msg += `Prencha o campo ${$(el).text().split(":")[0]}. </br>`
             } else if (id == "codFilialCadastro") {
-              var flag = false
-              that._model.getCodFiliais().forEach(el=> {
-                if (el.codigo == $(`#${id}`).val().trim()) {
-                  flag = true
+              var filiais = localStorage.getItem("codFilial")
+              if (filiais != null && filiais != undefined) {
+                var codFiliais = JSON.parse(filiais)
+                var flag = false
+                codFiliais.forEach(el => {
+                  if (el.codigo == $(`#${id}`).val().trim()) {
+                    flag = true
+                  }
+                })
+                if (flag) {
+                  msg += `Código filial já existente.  </br>`
                 }
-              })
-              if (flag) {
-                msg += `Código filial já existente.  </br>`
               }
             }
           }
@@ -55,6 +59,16 @@ let Controller = class Controller {
         if (msg != "") {
           that.fluigToast("Atenção!</br>", msg, "danger")
         } else {
+          var codFiliais = new Array()
+          var filiais = localStorage.getItem("codFilial")
+          if (filiais == null || filiais == undefined) {
+            codFiliais.push({ codigo: $(`#codFilialCadastro`).val().trim() })
+            localStorage.setItem("codFilial", JSON.stringify(codFiliais));
+          } else {
+            codFiliais = JSON.parse(filiais)
+            codFiliais.push({ codigo: $(`#codFilialCadastro`).val().trim() })
+            localStorage.setItem("codFilial", JSON.stringify(codFiliais));
+          }
           $(".cadastro").hide()
           $(".entrega").show()
           $("#tituloPagina").text("Entrega")
@@ -69,7 +83,7 @@ let Controller = class Controller {
             var id = $(el).attr("for")
             if ($(`#${id}`).val().trim() == "") {
               msg += `Prencha o campo ${$(el).text().split(":")[0]}. </br>`
-            } 
+            }
           }
         })
 
@@ -88,7 +102,7 @@ let Controller = class Controller {
         if ($("#confirmaEntrega").val() == "" || $("#confirmaEntrega").val() == null) {
           msg += "Realize a Confirmação da Entrega."
         } else if ($("#confirmaEntrega").val() == "nao") {
-          if ($("#observacao").val() == ""){
+          if ($("#observacao").val() == "") {
             msg += "Preencha a observação com a justificativa."
           }
         }
@@ -161,24 +175,24 @@ let Controller = class Controller {
   }
 
   fluigToast(title, message, type, timeout = 4000) {
-		FLUIGC.toast({
-			title,
-			message,
-			type,
-			timeout
-		});
-	}
+    FLUIGC.toast({
+      title,
+      message,
+      type,
+      timeout
+    });
+  }
 
   getDataAtual() {
-		Number.prototype.padLeft = function (base, chr) {
-			var len = (String(base || 10).length - String(this).length) + 1;
-			return len > 0 ? new Array(len).join(chr || '0') + this : this;
-		}
+    Number.prototype.padLeft = function (base, chr) {
+      var len = (String(base || 10).length - String(this).length) + 1;
+      return len > 0 ? new Array(len).join(chr || '0') + this : this;
+    }
 
-		var d = new Date;
-		var dformat = [d.getDate().padLeft(),
-		(d.getMonth() + 1).padLeft(),
-		d.getFullYear()].join('/');
-		return dformat;
-	}
+    var d = new Date;
+    var dformat = [d.getDate().padLeft(),
+    (d.getMonth() + 1).padLeft(),
+    d.getFullYear()].join('/');
+    return dformat;
+  }
 }
