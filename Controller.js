@@ -87,7 +87,7 @@ let Controller = class Controller {
         var msg = ""
         if ($("#confirmaEntrega").val() == "") {
           msg += "Realize a Confirmação da Entrega."
-        } else if ($("#confirmaEntrega").val() == "nao") {
+        } else if ($("#confirmaEntrega").val() == "nao" || $("#confirmaEntrega").val() == null) {
           if ($("#observacao").val() == ""){
             msg += "Preencha a observação com a justificativa."
           }
