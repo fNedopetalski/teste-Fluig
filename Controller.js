@@ -85,9 +85,9 @@ let Controller = class Controller {
 
       $("#btnEnviar").on("click", function (e) {
         var msg = ""
-        if ($("#confirmaEntrega").val() == "") {
+        if ($("#confirmaEntrega").val() == "" || $("#confirmaEntrega").val() == null) {
           msg += "Realize a Confirmação da Entrega."
-        } else if ($("#confirmaEntrega").val() == "nao" || $("#confirmaEntrega").val() == null) {
+        } else if ($("#confirmaEntrega").val() == "nao") {
           if ($("#observacao").val() == ""){
             msg += "Preencha a observação com a justificativa."
           }
